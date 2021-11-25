@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 SELECT
     site,
     account,
@@ -14,7 +12,7 @@ FROM
         platform,
         bigquery_name,
         time_of_entry,
-        first_value(time_of_entry) over (order by time_of_entry desc) lv
+        first_value(time_of_entry) over (partition by site order by time_of_entry desc) lv
   FROM `{{ target.project }}.agency_data_pipeline.accounts`
 )
   WHERE time_of_entry = lv
