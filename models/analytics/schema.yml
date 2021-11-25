@@ -1,0 +1,79 @@
+
+version: 2
+
+models:
+
+    - name: accounts_proc
+      description: "accounts_proc"
+      columns:
+          - name: site
+          - name: account
+          - name: account_normalized
+          - name: platform
+          - name: bigquery_name
+    
+    - name: conversion_goals_proc
+      description: "conversion_goals_proc"
+      columns:
+          - name: site
+          - name: bigquery_name
+          - name: platform
+          - name: goal_name
+          - name: goal_type
+          - name: account
+          - name: time_of_entry
+
+    - name: mappings_ga_proc
+      description: "mappings_ga_proc"
+      columns:
+          - name: store
+          - name: account
+          - name: bigquery_site_name
+          - name: source
+          - name: medium
+          - name: platform
+          - name: channel
+          - name: time_of_entry
+    
+    - name: test_variables_proc
+      description: "test_variables_proc"
+      columns:
+          - name: site
+          - name: platform
+          - name: dimension_index
+          - name: variant_id
+          - name: variant_name
+          - name: test_id
+          - name: creative_url
+          - name: test_start_date
+          - name: test_end_date
+          - name: account
+          - name: bigquery_name
+          - name: time_of_entry
+    
+    - name: ga_conversions
+      description: "ga_conversions"
+      columns:
+          - name: site
+          - name: bigquery_name
+          - name: platform
+          - name: goal_name
+          - name: goal_type
+          - name: account
+          - name: time_of_entry
+    
+    - name: ga_variables
+      description: "ga_variables"
+      columns:
+          - name: site
+          - name: platform
+          - name: dimension_index
+          - name: variant_id
+          - name: variant_name
+          - name: test_id
+          - name: creative_url
+          - name: test_start_date
+          - name: test_end_date
+          - name: account
+          - name: bigquery_name
+          - name: time_of_entry

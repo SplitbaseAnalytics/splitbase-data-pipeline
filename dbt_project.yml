@@ -34,5 +34,5 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   split_base:
       # Applies to all files under models/example/
-      example:
+      analytics:
           materialized: view
