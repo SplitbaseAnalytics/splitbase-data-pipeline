@@ -77,3 +77,24 @@ models:
           - name: account
           - name: bigquery_name
           - name: time_of_entry
+      
+    - name: ga_proc
+      description: "ga_proc"
+      columns:
+          - name: bigquery_name
+          - name: lookup_platform
+          - name: test_id
+          - name: variant_id
+          - name: variant_name
+          - name: creative_url
+          - name: date
+          - name: sourcemedium
+          - name: devicecategory
+          - name: sessions
+          - name: bounces
+          - name: revenue
+          - name: itemquantity
+          - name: transactions
+          - name: productaddstocart
+          - name: addtocart
+          - name: carttopurchase
