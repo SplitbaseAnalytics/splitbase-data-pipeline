@@ -10,7 +10,7 @@ with ga_report as (
 
 	    {% for account in accounts %}
 		
-		   	SELECT
+		   	SELECT distinct
 		   	'{{account}}' as bigquery_name,
 		   	'Google Analytics' as lookup_platform,
 			ta.ga_date as date,
