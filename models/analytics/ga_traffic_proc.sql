@@ -15,7 +15,7 @@ with ga_report as (
 	    	{% set ctp = get_column_values(table=ref('ga_conversions'), column='goal_name', max_records=50, filter_column='goal_type', filter_value='Cart to Purchase', filter_column_2='bigquery_name', filter_value_2=account ) %}
             {% set ind = get_column_values(table=ref('ga_variables'), column='dimension_index', max_records=50, filter_column='bigquery_name', filter_value=account ) %}
 
-		   	SELECT
+		   	SELECT distinct
 		   	'{{account}}' as bigquery_name,
 		   	'Google Analytics' as lookup_platform,
 			--ga_variable
