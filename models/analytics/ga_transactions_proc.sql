@@ -20,7 +20,7 @@ with ga_report as (
 			ta.ga_itemquantity as itemquantity,
 			ta.ga_transactions as transactions,
 			ta._sdc_sequence,
-			first_value(ta._sdc_sequence) OVER (PARTITION BY ta.ga_hostname, ta.ga_landingpagepath, ta.ga_date, ta.ga_sourcemedium ORDER BY ta._sdc_sequence DESC) lv
+			first_value(ta._sdc_sequence) OVER (PARTITION BY ta.ga_hostname, ta.ga_landingpagepath, ta.ga_date, ta.ga_sourcemedium , ta.ga_devicecategory ORDER BY ta._sdc_sequence DESC) lv
 			FROM `{{ target.project }}.ga_{{account}}.transactions_report` as ta
 		    {% if not loop.last %} UNION ALL {% endif %}
 	   {% endfor %}
