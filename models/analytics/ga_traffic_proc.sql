@@ -13,13 +13,22 @@ with ga_report as (
 
 	    	{% set atc = get_column_values(table=ref('ga_conversions'), column='goal_name', max_records=50, filter_column='goal_type', filter_value='Add to Cart', filter_column_2='bigquery_name', filter_value_2=account ) %}
 	    	{% set ctp = get_column_values(table=ref('ga_conversions'), column='goal_name', max_records=50, filter_column='goal_type', filter_value='Cart to Purchase', filter_column_2='bigquery_name', filter_value_2=account ) %}
+            {% set ind = get_column_values(table=ref('ga_variables'), column='dimension_index', max_records=50, filter_column='bigquery_name', filter_value=account ) %}
 
 		   	SELECT
 		   	'{{account}}' as bigquery_name,
 		   	'Google Analytics' as lookup_platform,
 			--ga_variable
 			test_id,
-			concat('ga_dimension',dimension_index) as variant_id,
+			{% if ind != [] %}
+				{% for goal in ind %}
+					cast(ga_dimension{{goal}} as string) 
+					{% if not loop.last %} + {% endif %} 
+					{% if loop.last %} as variant_id, {% endif %} 
+				{% endfor %}
+			{% else %}				
+				null as variant_id,
+			{% endif %}
 			variant_name,
 			creative_url,
 			tr.ga_date as date,
