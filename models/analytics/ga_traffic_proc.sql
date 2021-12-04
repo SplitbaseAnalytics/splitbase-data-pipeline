@@ -56,7 +56,7 @@ with ga_report as (
 				null as carttopurchase,		
 			{% endif %}
 			tr._sdc_sequence,
-			first_value(tr._sdc_sequence) OVER (PARTITION BY tr.ga_hostname, tr.ga_landingpagepath, tr.ga_date, tr.ga_sourcemedium ORDER BY tr._sdc_sequence DESC) lv
+			first_value(tr._sdc_sequence) OVER (PARTITION BY tr.ga_hostname, tr.ga_landingpagepath, tr.ga_date, tr.ga_sourcemedium , tr.ga_devicecategory ORDER BY tr._sdc_sequence DESC) lv
 			FROM {{ref('ga_variables')}} v
             inner join `{{ target.project }}.ga_{{account}}.traffic_report` as tr 
             on lower(REGEXP_REPLACE(tr.web_property_id, '[^a-zA-Z0-9]+', ''))  = lower(REGEXP_REPLACE(v.account, '[^a-zA-Z0-9]+', ''))
