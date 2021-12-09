@@ -15,7 +15,7 @@ with ga_report as (
 	    	{% set ctp = get_column_values(table=ref('ga_conversions'), column='goal_name', max_records=50, filter_column='goal_type', filter_value='Cart to Purchase', filter_column_2='bigquery_name', filter_value_2=account ) %}
             {% set ind = get_column_values(table=ref('ga_variables'), column='dimension_index', max_records=50, filter_column='bigquery_name', filter_value=account ) %}
 
-		   	SELECT distinct
+		   	SELECT 
 		   	'{{account}}' as bigquery_name,
 		   	'Google Analytics' as lookup_platform,
 			--ga_variable
@@ -55,11 +55,19 @@ with ga_report as (
 			{% else %}				
 				null as carttopurchase,		
 			{% endif %}
-			tr._sdc_sequence,
-			first_value(tr._sdc_sequence) OVER (PARTITION BY tr.ga_hostname, tr.ga_landingpagepath, tr.ga_date, tr.ga_sourcemedium , tr.ga_devicecategory ORDER BY tr._sdc_sequence DESC) lv
+			--tr._sdc_sequence,
+			--first_value(tr._sdc_sequence) OVER (PARTITION BY tr.ga_hostname, tr.ga_landingpagepath, tr.ga_date, tr.ga_sourcemedium , tr.ga_devicecategory ORDER BY tr._sdc_sequence DESC) lv
 			FROM {{ref('ga_variables')}} v
             inner join `{{ target.project }}.ga_{{account}}.traffic_report` as tr 
-            on lower(REGEXP_REPLACE(tr.web_property_id, '[^a-zA-Z0-9]+', ''))  = lower(REGEXP_REPLACE(v.account, '[^a-zA-Z0-9]+', ''))
+            on lower(REGEXP_REPLACE(tr.web_property_id, '[^a-zA-Z0-9]+', ''))  = lower(REGEXP_REPLACE(v.account, '[^a-zA-Z0-9]+', '')) --and v.variant_id = ga_dimension1
+			and {% if ind != [] %}
+				{% for goal in ind %}
+					cast(ga_dimension{{goal}} as string) = v.variant_id 
+					{% if loop.last %}{% endif %} 
+				{% endfor %}
+			{% else %}				
+				1=1,
+			{% endif %}
 		    {% if not loop.last %} UNION ALL {% endif %}
 	   {% endfor %}
 
@@ -82,7 +90,7 @@ sum(productaddstocart) productaddstocart,
 sum(addtocart) addtocart,
 sum(carttopurchase) carttopurchase,
 FROM ga_report
-where lv = _sdc_sequence
+--where lv = _sdc_sequence
 group by bigquery_name, lookup_platform, date, test_id, variant_id, variant_name , creative_url ,sourcemedium,devicecategory
 
 {% endif %}
