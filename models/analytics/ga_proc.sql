@@ -25,6 +25,9 @@ and tra.lookup_platform = trans.lookup_platform
 and trans.date = tra.date 
 and trans.devicecategory = tra.devicecategory 
 and trans.sourcemedium = tra.sourcemedium
+and trans.test_id = tra.test_id
+and trans.variant_id = tra.variant_id
+and trans.variant_name = tra.variant_name
 
         
 
