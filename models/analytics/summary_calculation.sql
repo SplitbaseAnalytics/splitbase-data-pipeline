@@ -21,10 +21,6 @@ order by  1,2,3
         case when (c.control_order         =0 or c.control_session      =0) then 0 else round((c.control_order          / c.control_session )*100 ,1)       end as control_conv
        ,case when (c.control_cartaddvisits =0 or c.control_session      =0) then 0 else round((c.control_cartaddvisits  / c.control_session )*100,1)        end as control_add_to_cart
        ,case when (c.control_order         =0 or c.control_cartaddvisits=0) then 0 else round((c.control_order          / c.control_cartaddvisits)*100,1)   end as control_complete_checkout
-       ,case when (c.control_revenue       =0 or c.control_session      =0) then 0 else round(c.control_revenue         / c.control_session,2)              end as control_RPS
-       ,case when (c.control_revenue       =0 or c.control_order        =0) then 0 else round(c.control_revenue         / c.control_order,2)                end as control_AOV
-       ,case when (c.control_units         =0 or c.control_order        =0) then 0 else round(c.control_units           / c.control_order,2)                end as control_UPT
-       ,case when (c.control_revenue       =0 or c.control_units        =0) then 0 else round(c.control_revenue         / c.control_units,2)                end as control_AUR
        ,case when (c.control_bounces       =0 or c.control_session      =0) then 0 else round((c.control_bounces        / c.control_session)*100,1)         end as control_bouncerate
        ,date
        ,bigquery_name
@@ -53,10 +49,6 @@ order by  1,2,3
         case when (c.variant1_order         =0 or c.variant1_session            =0) then 0 else round((c.variant1_order          / c.variant1_session)*100 ,1)      end as variant1_conv
        ,case when (c.variant1_cartaddvisits =0 or c.variant1_session            =0) then 0 else round((c.variant1_cartaddvisits  / c.variant1_session )*100,1)      end as variant1_add_to_cart
        ,case when (c.variant1_order         =0 or c.variant1_cartaddvisits      =0) then 0 else round((c.variant1_order          / c.variant1_cartaddvisits)*100,1) end as variant1_complete_checkout
-       ,case when (c.variant1_revenue       =0 or c.variant1_session            =0) then 0 else round(c.variant1_revenue         / c.variant1_session,2)            end as variant1_RPS
-       ,case when (c.variant1_revenue       =0 or c.variant1_order              =0) then 0 else round(c.variant1_revenue         / c.variant1_order,2)              end as variant1_AOV
-       ,case when (c.variant1_units         =0 or c.variant1_order              =0) then 0 else round(c.variant1_units           / c.variant1_order,2)              end as variant1_UPT
-       ,case when (c.variant1_revenue       =0 or c.variant1_units              =0) then 0 else round(c.variant1_revenue         / c.variant1_units,2)              end as variant1_AUR
        ,case when (c.variant1_bounces       =0 or c.variant1_session            =0) then 0 else round((c.variant1_bounces        / c.variant1_session)*100,1)       end as variant1_bouncerate
        ,date
        ,bigquery_name
@@ -86,10 +78,6 @@ order by  1,2,3
         case when (c.variant2_order          =0 or c.variant2_session            =0) then 0 else round((c.variant2_order          / c.variant2_session)*100 ,1)      end as variant2_conv
        ,case when (c.variant2_cartaddvisits  =0 or c.variant2_session            =0) then 0 else round((c.variant2_cartaddvisits  / c.variant2_session )*100,1)      end as variant2_add_to_cart
        ,case when (c.variant2_order          =0 or c.variant2_cartaddvisits      =0) then 0 else round((c.variant2_order          / c.variant2_cartaddvisits)*100,1) end as variant2_complete_checkout
-       ,case when (c.variant2_revenue        =0 or c.variant2_session            =0) then 0 else round(c.variant2_revenue         / c.variant2_session,2)            end as variant2_RPS
-       ,case when (c.variant2_revenue        =0 or c.variant2_order              =0) then 0 else round(c.variant2_revenue         / c.variant2_order,2)              end as variant2_AOV
-       ,case when (c.variant2_units          =0 or c.variant2_order              =0) then 0 else round(c.variant2_units           / c.variant2_order,2)              end as variant2_UPT
-       ,case when (c.variant2_revenue        =0 or c.variant2_units              =0) then 0 else round(c.variant2_revenue         / c.variant2_units,2)              end as variant2_AUR
        ,case when (c.variant2_bounces        =0 or c.variant2_session            =0) then 0 else round((c.variant2_bounces        / c.variant2_session)*100,1)       end as variant2_bouncerate
        ,date
        ,bigquery_name
@@ -103,42 +91,34 @@ order by  1,2,3
        ,cc.control_conv
        ,cc.control_add_to_cart
        ,cc.control_complete_checkout
-       ,cc.control_RPS
-       ,cc.control_AOV
-       ,cc.control_UPT
-       ,cc.control_AUR
        ,cc.control_bouncerate	
-       ,cast(c.control_session as int) as v1_normalized_sessions
-       ,round(c.control_session  * vc1.variant1_RPS,2) as v1_normalized_revenue
-       ,cast(c.control_session  * vc1.variant1_conv as int) as v1_normalized_orders
-       ,cast(c.control_session  * vc1.variant1_conv * vc1.variant1_UPT  as int)  as v1_normalized_units
-       ,cast(c.control_session  * vc1.variant1_bouncerate as int)  as v1_normalized_bounces
-       ,cast(c.control_session  * vc1.variant1_add_to_Cart as int) as  v1_normalized_cart_add_visits
-       ,vc1.variant1_Conv v1_normalized_conv
-       ,vc1.variant1_add_to_Cart v1_normalized_add_to_Cart
-       ,vc1.variant1_complete_checkout v1_normalized_complete_checkout
-       ,vc1.variant1_RPS v1_normalized_RPS
-       ,vc1.variant1_AOV v1_normalized_AOV
-       ,vc1.variant1_UPT v1_normalized_UPT
-       ,vc1.variant1_AUR v1_normalized_AUR
-       ,vc1.variant1_bouncerate	v1_normalized_bouncerate
-       ,cast(c.control_session  as int) as v2_normalized_sessions
-       ,round(c.control_session  * vc2.variant2_RPS ,2) as v2_normalized_revenue
-       ,cast(c.control_session  * vc2.variant2_conv as int) as v2_normalized_orders
-       ,cast(c.control_session  * vc2.variant2_conv * vc2.variant2_UPT as int)  as v2_normalized_Units
-       ,cast(c.control_session  * vc2.variant2_bouncerate  as int) as v2_normalized_bounces
-       ,cast(c.control_session  * vc2.variant2_add_to_Cart as int) as v2_normalized_cart_add_visits
-       ,vc2.variant2_Conv v2_normalized_conv
-       ,vc2.variant2_add_to_cart v2_normalized_add_to_cart
-       ,vc2.variant2_complete_checkout v2_normalized_complete_checkout
-       ,vc2.variant2_RPS v2_normalized_RPS
-       ,vc2.variant2_AOV v2_normalized_AOV
-       ,vc2.variant2_UPT v2_normalized_UPT
-       ,vc2.variant2_AUR v2_normalized_AUR
-       ,vc2.variant2_bouncerate	v2_normalized_bouncerate
+       ,v1.variant1_session
+       ,v1.variant1_revenue
+       ,v1.variant1_order
+       ,v1.variant1_units
+       ,v1.variant1_bounces
+       ,v1.variant1_cartaddvisits
+       ,vc1.variant1_Conv
+       ,vc1.variant1_add_to_Cart 
+       ,vc1.variant1_complete_checkout 
+       ,vc1.variant1_bouncerate	
+       ,v2.variant2_session
+       ,v2.variant2_revenue
+       ,v2.variant2_order
+       ,v2.variant2_units
+       ,v2.variant2_bounces
+       ,v2.variant2_cartaddvisits
+       ,vc2.variant2_Conv 
+       ,vc2.variant2_add_to_cart 
+       ,vc2.variant2_complete_checkout 
+       ,vc2.variant2_bouncerate	
     from control as c
+    left join Variant1 as v1 
+    on c.date = v1.date and c.bigquery_name= v1.bigquery_name and c.lookup_platform=v1.lookup_platform
     left join variant1_calculation as vc1
-    on vc1.date = c.date and vc1.bigquery_name = c.bigquery_name and vc1.lookup_platform = c.lookup_platform
+    on vc1.date = v1.date and vc1.bigquery_name = v1.bigquery_name and vc1.lookup_platform = v1.lookup_platform
+    left join Variant2 as v2 
+    on c.date = v2.date and c.bigquery_name= v2.bigquery_name and c.lookup_platform=v2.lookup_platform
     left join variant2_calculation  as vc2
     on vc2.date = c.date and vc2.bigquery_name = c.bigquery_name and vc2.lookup_platform = c.lookup_platform
     left join control_calculation  as cc 
